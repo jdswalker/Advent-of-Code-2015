@@ -11,8 +11,29 @@ git clone --branch master https://github.com/jdswalker/Advent-of-Code-2015.git
 cd Advent-of-Code-2015
 ```
 
-## Usage
+## Usage  
 
+```sh
+python -m advent_of_code [-h] [-v] -p DAY [-i FILE_NAME]
+python -m advent_of_code [--help] [--version] --puzzle DAY [--input FILE_NAME]
+```
+
+**Examples:**  
+
+```sh
+# Run test cases for Advent of Code day 2
+python -m advent_of_code -p 2
+No puzzle input was provided
+Running test cases for Advent of Code 2015 Day 2: I Was Told There Would Be No Math
+Test passed for input 2x3x4
+Test passed for input 1x1x10
+
+# Run Advent of Code day 2 with puzzle input
+python -m advent_of_code -p 2 -i puzzle_inputs/day-02.txt
+Advent of Code 2015 Day 2: I Was Told There Would Be No Math
+The elves should order 1586300 feet of wrapping paper
+and 3737498 feet of ribbon.
+```
 
 ## Programming Puzzles  
 
@@ -56,8 +77,6 @@ Each puzzle calls upon different skills and has two parts that build on a theme.
 **Beta Testing:** [Tim Giannetti] and Ben Lucek  
 
 **Community Managers:** [Danielle Lucek] and [Aneurysm9]  
-
-**Playing:** My implemented solutions to the problems!  
 
 [Advent of Code 2015]: https://adventofcode.com/2015  
 [About Advent of Code]: https://adventofcode.com/2015/about  
