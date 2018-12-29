@@ -4,8 +4,7 @@
 """
 Advent of Code 2015 from http://adventofcode.com/2015
 Author: James Walker
-Copyrighted under the MIT license:
-  http://www.opensource.org/licenses/mit-license.php
+Copyright: MIT license
 
 Purpose:
   Advent of Code is a series of small programming puzzles for a variety of

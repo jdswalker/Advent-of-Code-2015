@@ -4,10 +4,7 @@
 """
 Advent of Code 2015 from http://adventofcode.com/2015/day/7
 Author: James Walker
-Copyrighted 2017 under the MIT license:
-  http://www.opensource.org/licenses/mit-license.php
-Execution:
-  python advent_of_code_2015_day_07.py
+Copyright: MIT license
 
 --- Day 7: Some Assembly Required ---
 

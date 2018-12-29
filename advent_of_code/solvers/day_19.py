@@ -1,11 +1,10 @@
- #!/usr/bin/env python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 """
 Advent of Code 2015 from http://adventofcode.com/2015/day/19
 Author: James Walker
-Copyrighted 2018 under the MIT license:
-  http://www.opensource.org/licenses/mit-license.php
+Copyright: MIT license
 
 --- Day 19: Medicine for Rudolph ---
 

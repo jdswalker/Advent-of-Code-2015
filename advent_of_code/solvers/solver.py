@@ -4,8 +4,9 @@
 """
 Advent of Code 2015 from http://adventofcode.com/2015
 Author: James Walker
-Copyrighted 2018 under the MIT license:
-  http://www.opensource.org/licenses/mit-license.php
+Copyright: MIT license
+
+Defines a base class that is inherited by each of the Advent of Code solvers.
 """
 
 

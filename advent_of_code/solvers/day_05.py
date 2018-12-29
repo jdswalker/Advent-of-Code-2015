@@ -4,10 +4,7 @@
 """
 Advent of Code 2015 from http://adventofcode.com/2015/day/5
 Author: James Walker
-Copyrighted 2017 under the MIT license:
-  http://www.opensource.org/licenses/mit-license.php
-Execution:
-  python advent_of_code_2015_day_05.py
+Copyright: MIT license
 
 --- Day 5: Doesn't He Have Intern-Elves For This? ---
 

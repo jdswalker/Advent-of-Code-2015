@@ -4,8 +4,10 @@
 """
 Advent of Code 2015 from http://adventofcode.com/2015
 Author: James Walker
-Copyrighted 2018 under the MIT license:
-  http://www.opensource.org/licenses/mit-license.php
+Copyright: MIT license
+
+The factory module is used to instantiate puzzle solver objects for the various
+Advent of Code 2015 problems.
 """
 
 # Application-specific Imports

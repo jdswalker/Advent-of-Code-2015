@@ -4,8 +4,7 @@
 """
 Advent of Code 2015 from http://adventofcode.com/2015/day/20
 Author: James Walker
-Copyrighted 2018 under the MIT license:
-  http://www.opensource.org/licenses/mit-license.php
+Copyright: MIT license
 
 --- Day 20: Infinite Elves and Infinite Houses ---
 

@@ -4,10 +4,7 @@
 """
 Advent of Code 2015 from http://adventofcode.com/2015/day/8
 Author: James Walker
-Copyrighted 2018 under the MIT license:
-  http://www.opensource.org/licenses/mit-license.php
-Execution:
-  python advent_of_code_2015_day_08.py
+Copyright: MIT license
 
 --- Day 8: Matchsticks ---
 

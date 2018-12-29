@@ -4,10 +4,7 @@
 """
 Advent of Code 2015 from http://adventofcode.com/2015/day/2
 Author: James Walker
-Copyrighted 2017 under the MIT license:
-  http://www.opensource.org/licenses/mit-license.php
-Execution:
-  python advent_of_code_2015_day_02.py
+Copyright: MIT license
 
 --- Day 2: I Was Told There Would Be No Math ---
 
