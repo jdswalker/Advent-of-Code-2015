@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-Advent of Code 2015 from http://adventofcode.com/2015/day/1
+"""Puzzle Solver for Advent of Code 2015 Day 1
 Author: James Walker
 Copyright: MIT license
 
+Description (https://adventofcode.com/2015/day/1):
 --- Day 1: Not Quite Lisp ---
 
   Santa was hoping for a white Christmas, but his weather machine's "snow"

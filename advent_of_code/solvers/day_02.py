@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-Advent of Code 2015 from http://adventofcode.com/2015/day/2
+"""Puzzle Solver for Advent of Code 2015 Day 2
 Author: James Walker
 Copyright: MIT license
 
+Description (https://adventofcode.com/2015/day/2):
 --- Day 2: I Was Told There Would Be No Math ---
 
   The elves are running low on wrapping paper, and so they need to submit an

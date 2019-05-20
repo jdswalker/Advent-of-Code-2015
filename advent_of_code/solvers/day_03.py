@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-Advent of Code 2015 from http://adventofcode.com/2015/day/3
+"""Puzzle Solver for Advent of Code 2015 Day 3
 Author: James Walker
 Copyright: MIT license
 
+Description (https://adventofcode.com/2015/day/3):
 --- Day 3: Perfectly Spherical Houses in a Vacuum ---
 
   Santa is delivering presents to an infinite two-dimensional grid of houses.
