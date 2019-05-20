@@ -35,7 +35,6 @@ Copyright: MIT license
 
 # Standard Library Imports
 import hashlib
-import re
 
 # Application-specific Imports
 from advent_of_code.solvers import solver
@@ -57,24 +56,22 @@ class Solver(solver.AdventOfCodeSolver):
             'are {0} and {1}',
         ))
 
-    def _get_valid_hash_number(self, prefix, hash_num=0):
+    def _get_hash_number(self, prefix, hash_num):
         """Searches for the first MD5 hash that matches the given prefix
 
         Args:
-            prefix (str):
+            prefix (str): String that the MD5 hex digest must begin with
             hash_num (int): The number to begin searching for the next hash
         Returns:
             int: The number that produces an MD5 hash with the prefix
         """
         md5_hash = hashlib.md5(self._puzzle_input.encode('utf-8'))
-        hash_prefix = re.compile(prefix)
         while True:
             hash_input = md5_hash.copy()
             hash_input.update(str(hash_num).encode('utf-8'))
-            if not hash_prefix.match(hash_input.hexdigest()):
-                hash_num += 1
-            else:
+            if hash_input.hexdigest().startswith(prefix):
                 break
+            hash_num += 1
         return hash_num
 
     def _solve_puzzle_parts(self):
@@ -86,7 +83,7 @@ class Solver(solver.AdventOfCodeSolver):
         """
         valid_hash = '000000'
         # Day 4: Part 1
-        hash_5_match = self._get_valid_hash_number(valid_hash[:5])
+        hash_5_match = self._get_valid_hash_number(valid_hash[:5], hash_num=0)
         # Day 4: Part 2
         hash_6_match = self._get_valid_hash_number(valid_hash, hash_5_match)
         return (hash_5_match, hash_6_match)
@@ -97,5 +94,9 @@ class Solver(solver.AdventOfCodeSolver):
         Args: None
         Returns: None
         """
-        self._run_test_case(solver.TestCase('abcdef', 609043, 6742839))
-        self._run_test_case(solver.TestCase('pqrstuv', 1048970, 5714438))
+        test_cases = (
+            solver.TestCase('abcdef', 609043, 6742839),
+            solver.TestCase('pqrstuv', 1048970, 5714438),
+        )
+        for test_case in test_cases:
+            self._run_test_case(test_case)
