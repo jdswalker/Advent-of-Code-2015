@@ -100,10 +100,9 @@ class Solver(solver.AdventOfCodeSolver):
             location (Location): A tuple with Santa's x and y coorindates
         Returns: None
         """
-        try:
-            self._house_tracker[location] += 1
-        except KeyError:
-            self._house_tracker[location] = 1
+        if location not in self._house_tracker:
+            self._house_tracker[location] = 0
+        self._house_tracker[location] += 1
 
     def _get_next_location(self, location, move):
         """Updates the coordinate position of one of the two Santa's
@@ -200,7 +199,11 @@ class Solver(solver.AdventOfCodeSolver):
         Args: None
         Returns: None
         """
-        self._run_test_case(solver.TestCase('>', 2, 2))
-        self._run_test_case(solver.TestCase('^v', 2, 3))
-        self._run_test_case(solver.TestCase('^>v<', 4, 3))
-        self._run_test_case(solver.TestCase('^v^v^v^v^v', 2, 11))
+        test_cases = (
+            solver.TestCase('>', 2, 2),
+            solver.TestCase('^v', 2, 3),
+            solver.TestCase('^>v<', 4, 3),
+            solver.TestCase('^v^v^v^v^v', 2, 11),
+        )
+        for test_case in test_cases:
+            self._run_test_case(test_case)

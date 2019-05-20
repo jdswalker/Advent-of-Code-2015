@@ -101,14 +101,18 @@ class Solver(solver.AdventOfCodeSolver):
         Args: None
         Returns: None
         """
-        self._run_test_case(solver.TestCase('(())', 0, 0))
-        self._run_test_case(solver.TestCase('()()', 0, 0))
-        self._run_test_case(solver.TestCase('(((', 3, 0))
-        self._run_test_case(solver.TestCase('(()(()(', 3, 0))
-        self._run_test_case(solver.TestCase('))(((((', 3, 1))
-        self._run_test_case(solver.TestCase('())', -1, 3))
-        self._run_test_case(solver.TestCase('))(', -1, 1))
-        self._run_test_case(solver.TestCase(')))', -3, 1))
-        self._run_test_case(solver.TestCase(')())())', -3, 1))
-        self._run_test_case(solver.TestCase(')', -1, 1))
-        self._run_test_case(solver.TestCase('()())', -1, 5))
+        test_cases = (
+            solver.TestCase('(())', 0, 0),
+            solver.TestCase('()()', 0, 0),
+            solver.TestCase('(((', 3, 0),
+            solver.TestCase('(()(()(', 3, 0),
+            solver.TestCase('))(((((', 3, 1),
+            solver.TestCase('())', -1, 3),
+            solver.TestCase('))(', -1, 1),
+            solver.TestCase(')))', -3, 1),
+            solver.TestCase(')())())', -3, 1),
+            solver.TestCase(')', -1, 1),
+            solver.TestCase('()())', -1, 5),
+        )
+        for test_case in test_cases:
+            self._run_test_case(test_case)

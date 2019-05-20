@@ -136,5 +136,9 @@ class Solver(solver.AdventOfCodeSolver):
         Args: None
         Returns: None
         """
-        self._run_test_case(solver.TestCase('2x3x4', 58, 34))
-        self._run_test_case(solver.TestCase('1x1x10', 43, 14))
+        test_cases = (
+            solver.TestCase('2x3x4', 58, 34),
+            solver.TestCase('1x1x10', 43, 14),
+        )
+        for test_case in test_cases:
+            self._run_test_case(test_case)
