@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-Advent of Code 2015 from http://adventofcode.com/2015/day/6
+"""Puzzle Solver for Advent of Code 2015 Day 6
 Author: James Walker
 Copyright: MIT license
 
+Description (https://adventofcode.com/2015/day/6):
 --- Day 6: Probably a Fire Hazard ---
 
   Because your neighbors keep defeating you in the holiday house decorating
@@ -152,6 +152,7 @@ class ComplexLightGrid(LightGrid):
 
     def set_light_state(self, start, end, light_state):
         """Sets a row of lights to a specific state
+
         Args:
             start (int): The grid index for the light to begin setting states
             end (int): The grid index for the light to stop setting states
@@ -168,6 +169,7 @@ class ComplexLightGrid(LightGrid):
 
     def toggle_light_state(self, start, end, increment=2):
         """Increases the intensity for a row of lights between two indices
+
         Args:
             start (int): The grid index for the light to begin toggling lights
             end (int): The grid index for the light to stop toggling lights
@@ -183,7 +185,7 @@ class ComplexLightGrid(LightGrid):
 class Solver(solver.AdventOfCodeSolver):
     """Advent of Code 2015 Day 6: Probably a Fire Hazard
 
-    Attributes
+    Attributes:
         puzzle_input (list): A list of instructions for solving the puzzle
         puzzle_title (str): Name of the Advent of Code puzzle
         solved_output (str): A template string for solution output
@@ -208,7 +210,7 @@ class Solver(solver.AdventOfCodeSolver):
         """Parses start and end points from the instruction
 
         Args:
-            instruction (dict):
+            instruction (dict): Parsed coordinates for which lights to change
         Returns:
             tuple: Start and end coordinates for the intruction
         """
@@ -217,22 +219,22 @@ class Solver(solver.AdventOfCodeSolver):
         return (start, end)
 
     def toggle_lights(self, light_grid, toggle_instr):
-        """
+        """Changes the given lights based on their state (i.e., on or off)
 
         Args:
             light_grid (LightGrid): Represents a 2D grid of lights
-            toggle_instr (MatchObject):
+            toggle_instr (MatchObject): Parsed coordinates for lights to change
         Returns: None
         """
         start, end = self._parse_points(toggle_instr.groupdict())
         light_grid.toggle_light_state(start, end)
 
     def change_light_state(self, light_grid, turn_instr):
-        """
+        """Sets the given lights to a particular state (i.e., on or off)
 
         Args:
             light_grid (LightGrid): Represents a 2D grid of lights
-            turn_instr (MatchObject):
+            turn_instr (MatchObject): Parsed coordinates for lights to change
         Returns: None
         """
         light_instr = turn_instr.groupdict()
@@ -249,15 +251,12 @@ class Solver(solver.AdventOfCodeSolver):
         simple_grid = SimpleLightGrid(width=1000, height=1000)
         complex_grid = ComplexLightGrid(width=1000, height=1000)
         for instruction in self._puzzle_input.splitlines():
-            if not instruction:
-                continue
-            toggle_instr = self._toggle.match(instruction)
-            if toggle_instr:
+            if instruction.startswith('toggle'):
+                toggle_instr = self._toggle.match(instruction)
                 self.toggle_lights(simple_grid, toggle_instr)
                 self.toggle_lights(complex_grid, toggle_instr)
-                continue
-            turn_instr = self._turn.match(instruction)
-            if turn_instr:
+            elif instruction.startswith('turn'):
+                turn_instr = self._turn.match(instruction)
                 self.change_light_state(simple_grid, turn_instr)
                 self.change_light_state(complex_grid, turn_instr)
         return (simple_grid.count_lights(), complex_grid.count_lights())
@@ -275,10 +274,14 @@ class Solver(solver.AdventOfCodeSolver):
         input5 = '\n'.join((input1, input4))
         input6 = 'turn on 0,0 through 0,0'
         input7 = 'toggle 0,0 through 999,999'
-        self._run_test_case(solver.TestCase(input1, '1000000', '1000000'))
-        self._run_test_case(solver.TestCase(input2, '1000', '2000'))
-        self._run_test_case(solver.TestCase(input3, '999000', '1002000'))
-        self._run_test_case(solver.TestCase(input4, '0', '0'))
-        self._run_test_case(solver.TestCase(input5, '999996', '999996'))
-        self._run_test_case(solver.TestCase(input6, '1', '1'))
-        self._run_test_case(solver.TestCase(input7, '1000000', '2000000'))
+        test_cases = (
+            solver.TestCase(input1, '1000000', '1000000'),
+            solver.TestCase(input2, '1000', '2000'),
+            solver.TestCase(input3, '999000', '1002000'),
+            solver.TestCase(input4, '0', '0'),
+            solver.TestCase(input5, '999996', '999996'),
+            solver.TestCase(input6, '1', '1'),
+            solver.TestCase(input7, '1000000', '2000000'),
+        )
+        for test_case in test_cases:
+            self._run_test_case(test_case)
