@@ -22,13 +22,12 @@ import sys
 from advent_of_code.solvers import factory
 
 
-def get_args_for_script(input_args=None):
-    """Parses the command-line inputs to the script unless given a list
+def get_args():
+    """Parses command-line inputs for the script or assigns default values
 
-    Args
-        inputArgs (list): The input parameters to the script
-    Returns
-        Namespace: An object populated with the values of the input arguments
+    Args: None
+    Returns:
+        Namespace: Values parsed from command-line arguments
     """
     parser = argparse.ArgumentParser(
         prog='advent_of_code',
@@ -39,7 +38,7 @@ def get_args_for_script(input_args=None):
         '-v',
         '--version',
         action='version',
-        version='%(prog)s v1.0.0',
+        version='Advent of Code 2015 Puzzle Solver v1.0.1',
         help='Show the version number of this package',
     )
     parser.add_argument(
@@ -62,17 +61,16 @@ def get_args_for_script(input_args=None):
         dest='input_file',
     )
 
-    return parser.parse_args(input_args) if input_args else parser.parse_args()
+    return parser.parse_args()
 
 
-def solve_puzzle(argv):
+def main():
     """Solves the puzzle input from a file, if given, otherwise runs tests
 
-    Args:
-        argv (list): Command-line or input parameters for the program
+    Args: None
     Returns: None
     """
-    args = get_args_for_script(argv)
+    args = get_args()
     solver = factory.get_solver(args.puzzle, args.input_file)
     if args.input_file is None:
         print('No puzzle input was provided')
@@ -84,4 +82,4 @@ def solve_puzzle(argv):
 
 
 if __name__ == '__main__':
-    sys.exit(solve_puzzle(sys.argv[1:]))
+    sys.exit(main())
