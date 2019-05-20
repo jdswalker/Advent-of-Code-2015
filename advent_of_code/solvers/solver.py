@@ -9,15 +9,14 @@ Copyright: MIT license
 Defines a base class that is inherited by each of the Advent of Code solvers.
 """
 
-
 # Standard Library Imports
-import collections
+from collections import namedtuple
 import os
 import sys
 
 
 # Stores expected input/output for test cases run on the solver
-TestCase = collections.namedtuple('TestCase', 'input expected1 expected2')
+TestCase = namedtuple('TestCase', 'input expected1 expected2')
 
 
 class AdventOfCodeSolver(object):
