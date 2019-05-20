@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-Advent of Code 2015 from http://adventofcode.com/2015
+"""Puzzle Solver Factory
+  The factory module is used to instantiate puzzle solver objects for the
+  various Advent of Code 2015 problems.
+
 Author: James Walker
 Copyright: MIT license
-
-The factory module is used to instantiate puzzle solver objects for the various
-Advent of Code 2015 problems.
 """
 
 # Application-specific Imports

@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-Advent of Code 2015 from http://adventofcode.com/2015
+"""Puzzle Solver base-class
+  Defines a base class that is inherited by each of the Advent of Code 2015
+  puzzle solvers.
+
 Author: James Walker
 Copyright: MIT license
-
-Defines a base class that is inherited by each of the Advent of Code solvers.
 """
 
 # Standard Library Imports
