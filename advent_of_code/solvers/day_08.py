@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-Advent of Code 2015 from http://adventofcode.com/2015/day/8
+"""Puzzle Solver for Advent of Code 2015 Day 8
 Author: James Walker
 Copyright: MIT license
 
+Description (https://adventofcode.com/2015/day/8):
 --- Day 8: Matchsticks ---
 
   Space on the sleigh is limited this year, and so Santa will be bringing his
@@ -59,7 +59,7 @@ from advent_of_code.solvers import solver
 class Solver(solver.AdventOfCodeSolver):
     """Advent of Code 2015 Day 8: Matchsticks
 
-    Attributes
+    Attributes:
         puzzle_input (list): A list of instructions for solving the puzzle
         puzzle_title (str): Name of the Advent of Code puzzle
         solved_output (str): A template string for solution output
@@ -162,11 +162,11 @@ class Solver(solver.AdventOfCodeSolver):
         Args: None
         Returns: None
         """
-        input1 = '""'
-        input2 = '"abc"'
-        input3 = r'"aaa\"aaa"'
-        input4 = r'"\x27"'
-        self._run_test_case(solver.TestCase(input1, 2 - 0, 6 - 2))
-        self._run_test_case(solver.TestCase(input2, 5 - 3, 9 - 5))
-        self._run_test_case(solver.TestCase(input3, 10 - 7, 16 - 10))
-        self._run_test_case(solver.TestCase(input4, 6 - 1, 11 - 6))
+        test_cases = (
+            solver.TestCase('""', 2 - 0, 6 - 2),
+            solver.TestCase('"abc"', 5 - 3, 9 - 5),
+            solver.TestCase(r'"aaa\"aaa"', 10 - 7, 16 - 10),
+            solver.TestCase(r'"\x27"', 6 - 1, 11 - 6),
+        )
+        for test_case in test_cases:
+            self._run_test_case(test_case)
