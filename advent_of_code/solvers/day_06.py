@@ -72,7 +72,7 @@ Point = namedtuple('Point', 'x y')
 class LightGrid(object):
     """Abstract class for representing a 2D grid of lights
 
-    Attributes
+    Attributes:
         grid_size (Point): Stores maximum x- and y-coordinate of the light grid
         light_grid (list): Lights in the grid as a list of rows
     """
@@ -112,7 +112,7 @@ class LightGrid(object):
 class SimpleLightGrid(LightGrid):
     """Represents a 2D grid of lights that can be turned on and off
 
-    Attributes
+    Attributes:
         grid_size (Point): Stores maximum x- and y-coordinate of the light grid
         light_grid (list): Lights in the grid as a list of rows
     """
@@ -145,7 +145,7 @@ class SimpleLightGrid(LightGrid):
 class ComplexLightGrid(LightGrid):
     """Represents a 2D grid of lights that can change intensity
 
-    Attributes
+    Attributes:
         grid_size (Point): Stores maximum x- and y-coordinate of the light grid
         light_grid (list): Lights in the grid as a list of rows
     """

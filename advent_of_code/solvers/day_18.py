@@ -162,7 +162,7 @@ from advent_of_code.solvers import solver
 class LightGrid(object):
     """Class for representing a 2D grid of lights
 
-    Attributes
+    Attributes:
         light_grid (list): Lights in the grid as a list of rows
         broken (bool):
     """
@@ -254,7 +254,7 @@ class LightGrid(object):
 class Solver(solver.AdventOfCodeSolver):
     """Advent of Code 2015 Day 18: Like a GIF For Your Yard
 
-    Attributes
+    Attributes:
         puzzle_input (list): A list of instructions for solving the puzzle
         puzzle_title (str): Name of the Advent of Code puzzle
         solved_output (str): A template string for solution output

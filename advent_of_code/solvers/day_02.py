@@ -69,7 +69,7 @@ Present = namedtuple('Present', 'length width height')
 class Solver(solver.AdventOfCodeSolver):
     """Advent of Code 2015 Day 2: I Was Told There Would Be No Math
 
-    Attributes
+    Attributes:
         file_name (str): The name of the file storing the puzzle input
         puzzle_title (str): Name of the Advent of Code puzzle
         puzzle_input (list): A list of instructions for solving the puzzle

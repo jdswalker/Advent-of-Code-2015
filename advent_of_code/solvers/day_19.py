@@ -91,16 +91,13 @@ import re
 from advent_of_code.solvers import solver
 
 
-Candidate = namedtuple(
-    typename='Candidate',
-    field_names='suffix precursor_suffix steps molecule',
-)
+Candidate = namedtuple('Candidate', 'suffix precursor_suffix steps molecule')
 
 
 class Solver(solver.AdventOfCodeSolver):
     """Advent of Code 2015 Day 19: Medicine for Rudolph
 
-    Attributes
+    Attributes:
         puzzle_input (list): A list of instructions for solving the puzzle
         puzzle_title (str): Name of the Advent of Code puzzle
         solved_output (str): A template string for solution output

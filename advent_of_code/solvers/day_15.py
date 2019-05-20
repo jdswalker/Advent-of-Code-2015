@@ -86,7 +86,7 @@ Ingredient = namedtuple(
 class Solver(solver.AdventOfCodeSolver):
     """Advent of Code 2015 Day 15: Science for Hungry People
 
-    Attributes
+    Attributes:
         puzzle_input (list): A list of instructions for solving the puzzle
         puzzle_title (str): Name of the Advent of Code puzzle
         solved_output (str): A template string for solution output

@@ -77,7 +77,7 @@ Instruction = namedtuple(
 class Computer(object):
     """Represents a computer with 2 registers that can execute 6 instructions
 
-    Attributes
+    Attributes:
         registers (dict): Two registers that can hold any non-negative integer
         instruction_pointer (int): Index of an instruction in the program
     """
@@ -150,7 +150,7 @@ class Computer(object):
 class Solver(solver.AdventOfCodeSolver):
     """Advent of Code 2015 Day 23: Opening the Turing Lock
 
-    Attributes
+    Attributes:
         puzzle_input (list): A list of instructions for solving the puzzle
         puzzle_title (str): Name of the Advent of Code puzzle
         solved_output (str): A template string for solution output
