@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-Advent of Code 2015 from http://adventofcode.com/2015/day/4
+"""Puzzle Solver for Advent of Code 2015 Day 4
 Author: James Walker
 Copyright: MIT license
 
+Description (https://adventofcode.com/2015/day/4):
 --- Day 4: The Ideal Stocking Stuffer ---
 
   Santa needs help mining some AdventCoins (very similar to bitcoins) to use as
@@ -56,15 +56,16 @@ class Solver(solver.AdventOfCodeSolver):
             'are {0} and {1}',
         ))
 
-    def _get_hash_number(self, prefix, hash_num):
+    def _get_hash_number(self, prefix, start):
         """Searches for the first MD5 hash that matches the given prefix
 
         Args:
             prefix (str): String that the MD5 hex digest must begin with
-            hash_num (int): The number to begin searching for the next hash
+            start (int): Number to begin searching for the next hash
         Returns:
-            int: The number that produces an MD5 hash with the prefix
+            int: Number that produces an MD5 hash matching the given prefix
         """
+        hash_num = 0 if start is None else start
         md5_hash = hashlib.md5(self._puzzle_input.encode('utf-8'))
         while True:
             hash_input = md5_hash.copy()
@@ -81,12 +82,11 @@ class Solver(solver.AdventOfCodeSolver):
         Returns:
             tuple: Pair of solutions for the two parts of the puzzle
         """
-        valid_hash = '000000'
         # Day 4: Part 1
-        hash_5_match = self._get_valid_hash_number(valid_hash[:5], hash_num=0)
+        match1 = self._get_hash_number(prefix='00000', start=0)
         # Day 4: Part 2
-        hash_6_match = self._get_valid_hash_number(valid_hash, hash_5_match)
-        return (hash_5_match, hash_6_match)
+        match2 = self._get_hash_number(prefix='000000', start=match1)
+        return (match1, match2)
 
     def run_test_cases(self):
         """Runs a series of inputs and compares against expected outputs
