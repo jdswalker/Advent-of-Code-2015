@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-Advent of Code 2015 from http://adventofcode.com/2015/day/7
+"""Puzzle Solver for Advent of Code 2015 Day 7
 Author: James Walker
 Copyright: MIT license
 
+Description (https://adventofcode.com/2015/day/7):
 --- Day 7: Some Assembly Required ---
 
   This year, Santa brought little Bobby Tables a set of wires and bitwise logic
@@ -108,7 +108,7 @@ class Solver(solver.AdventOfCodeSolver):
         Args:
             signal (str): A number for a signal value or letters for a wire ID
         Returns:
-            (dict): A dictionary of wire and circuit attributes
+            dict: A dictionary of wire and circuit attributes
         """
         source_circuit = None
         if signal in self._wire_tracker:
@@ -172,11 +172,13 @@ class Solver(solver.AdventOfCodeSolver):
             instruction (str): One of the puzzle instructions
         Returns: None
         """
+        circuit_type1 = ('SIGNAL_WIRE', 'NOT_GATE')
+        circuit_type2 = ('AND_GATE', 'OR_GATE', 'LEFT_SHIFT', 'RIGHT_SHIFT')
         for circuit_type, pattern in self._instructions.items():
             parsed_type = pattern.match(instruction)
             if parsed_type is None:
                 continue
-            if circuit_type == 'SIGNAL_WIRE' or circuit_type == 'NOT_GATE':
+            if circuit_type in circuit_type1:
                 signal, wire = parsed_type.groups()
                 self._input_handler(wire, circuit_type, signal)
                 if circuit_type == 'SIGNAL_WIRE':
@@ -184,9 +186,7 @@ class Solver(solver.AdventOfCodeSolver):
                     if wire_signal is not None:
                         self._wire_tracker[wire]['signal'] = wire_signal
                 break
-            if (circuit_type == 'AND_GATE' or circuit_type == 'OR_GATE'
-                    or circuit_type == 'LEFT_SHIFT'
-                    or circuit_type == 'RIGHT_SHIFT'):
+            if circuit_type in circuit_type2:
                 input_a, input_b, output = parsed_type.groups()
                 self._input_handler(output, circuit_type, input_a, input_b)
                 break
@@ -223,17 +223,16 @@ class Solver(solver.AdventOfCodeSolver):
             circuit_signal = input_a & bit_mask
         elif circuit_type == 'NOT_GATE':
             circuit_signal = ~input_a & bit_mask
-        elif input_b is not None:
-            if circuit_type == 'AND_GATE':
-                circuit_signal = (input_a & input_b) & bit_mask
-            elif circuit_type == 'OR_GATE':
-                circuit_signal = (input_a | input_b) & bit_mask
-            elif circuit_type == 'LEFT_SHIFT':
-                circuit_signal = (input_a << input_b) & bit_mask
-            elif circuit_type == 'RIGHT_SHIFT':
-                circuit_signal = (input_a >> input_b) & bit_mask
-        else:
+        elif input_b is None:
             circuit_signal = None
+        elif circuit_type == 'AND_GATE':
+            circuit_signal = (input_a & input_b) & bit_mask
+        elif circuit_type == 'OR_GATE':
+            circuit_signal = (input_a | input_b) & bit_mask
+        elif circuit_type == 'LEFT_SHIFT':
+            circuit_signal = (input_a << input_b) & bit_mask
+        elif circuit_type == 'RIGHT_SHIFT':
+            circuit_signal = (input_a >> input_b) & bit_mask
         return circuit_signal
 
     def _propagate_signals(self):
@@ -311,10 +310,14 @@ class Solver(solver.AdventOfCodeSolver):
         input5 = '\n'.join(('123 -> b', 'NOT b -> a'))
         input6 = '\n'.join(('123 -> b', 'b LSHIFT 2 -> a'))
         input7 = '\n'.join(('123 -> b', 'b RSHIFT 2 -> a'))
-        self._run_test_case(solver.TestCase(input1, 123, 123))
-        self._run_test_case(solver.TestCase(input2, 321, 321))
-        self._run_test_case(solver.TestCase(input3, 72, 72))
-        self._run_test_case(solver.TestCase(input4, 507, 507))
-        self._run_test_case(solver.TestCase(input5, 65412, 123))
-        self._run_test_case(solver.TestCase(input6, 492, 1968))
-        self._run_test_case(solver.TestCase(input7, 30, 7))
+        test_cases = (
+            solver.TestCase(input1, 123, 123),
+            solver.TestCase(input2, 321, 321),
+            solver.TestCase(input3, 72, 72),
+            solver.TestCase(input4, 507, 507),
+            solver.TestCase(input5, 65412, 123),
+            solver.TestCase(input6, 492, 1968),
+            solver.TestCase(input7, 30, 7),
+        )
+        for test_case in test_cases:
+            self._run_test_case(test_case)
