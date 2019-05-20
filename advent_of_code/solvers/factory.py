@@ -44,8 +44,8 @@ def get_solver(puzzle, file_name=None):
     """Instantiates the solver for the given Advent of Code problem
 
     Args:
-        puzzle (int) Number of the Advent of Code problem to solve
-        file_name (str) Name of a file containing puzzle input
+        puzzle (int): Number of the Advent of Code problem to solve
+        file_name (str): Name of a file containing puzzle input
     Returns:
         Solver: Used to solve the given Advent of Code problem
     Raises:
