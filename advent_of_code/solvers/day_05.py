@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-Advent of Code 2015 from http://adventofcode.com/2015/day/5
+"""Puzzle Solver for Advent of Code 2015 Day 5
 Author: James Walker
 Copyright: MIT license
 
+Description (https://adventofcode.com/2015/day/5):
 --- Day 5: Doesn't He Have Intern-Elves For This? ---
 
   Santa needs help figuring out which strings in his text file are naughty or
@@ -63,7 +63,6 @@ Copyright: MIT license
 # Standard Library Imports
 import re
 
-
 # Application-specific Imports
 from advent_of_code.solvers import solver
 
@@ -75,11 +74,11 @@ class Solver(solver.AdventOfCodeSolver):
         puzzle_input (list): A list of instructions for solving the puzzle
         puzzle_title (str): Name of the Advent of Code puzzle
         solved_output (str): A template string for solution output
-        regex_vowels (RegexObject):
-        regex_double_char (RegexObject):
-        regex_naughty (RegexObject):
-        regex_double_pair (RegexObject):
-        regex_triplet (RegexObject):
+        vowels (RegexObject): Pattern for vowel characters
+        double_char (RegexObject): Pattern for consecutive repeat characters
+        naughty (RegexObject): Pattern for "naughty" character pairs
+        double_pair (RegexObject): Pattern for repeated character pair
+        triplet (RegexObject): Pattern for 3 character palindrome
     """
 
     def __init__(self, *args):
@@ -95,22 +94,24 @@ class Solver(solver.AdventOfCodeSolver):
         self._triplet = re.compile(r'(\w)\w\1')
 
     def _is_nice_string_using_old_rules(self, string):
-        """Runs a series of inputs and compares against expected outputs
+        """Checks if the string matches part 1 conditions for a "nice string"
 
-        Args: None
+        Args:
+            string (str): Input to check conditions against
         Returns:
-            bool:
+            bool: True if the input satisfies the "nice" conditions, else False
         """
         return (self._naughty.search(string) is None
                 and len(self._vowels.findall(string)) > 2
                 and self._double_char.search(string))
 
     def _is_nice_string_using_new_rules(self, string):
-        """Runs a series of inputs and compares against expected outputs
+        """Checks if the string matches part 2 conditions for a "nice string"
 
-        Args: None
+        Args:
+            string (str): Input to check conditions against
         Returns:
-            bool:
+            bool: True if the input satisfies the "nice" conditions, else False
         """
         return (self._double_pair.search(string)
                 and self._triplet.search(string))
@@ -139,15 +140,19 @@ class Solver(solver.AdventOfCodeSolver):
         Args: None
         Returns: None
         """
-        self._run_test_case(solver.TestCase('ugknbfddgicrmopn', 1, 0))
-        self._run_test_case(solver.TestCase('aaa', 1, 0))
-        self._run_test_case(solver.TestCase('jchzalrnumimnmhp', 0, 0))
-        self._run_test_case(solver.TestCase('haegwjzuvuyypxyu', 0, 0))
-        self._run_test_case(solver.TestCase('dvszwmarrgswjxmb', 0, 0))
-        self._run_test_case(solver.TestCase('xyxy', 0, 1))
-        self._run_test_case(solver.TestCase('aabcdefgaa', 0, 0))
-        self._run_test_case(solver.TestCase('qjhvhtzxzqqjkmpb', 0, 1))
-        self._run_test_case(solver.TestCase('xxyxx', 0, 1))
-        self._run_test_case(solver.TestCase('uurcxstgmygtbstg', 0, 0))
-        self._run_test_case(solver.TestCase('ieodomkazucvgmuy', 0, 0))
-        self._run_test_case(solver.TestCase('aaccacc', 1, 1))
+        test_cases = (
+            solver.TestCase('ugknbfddgicrmopn', 1, 0),
+            solver.TestCase('aaa', 1, 0),
+            solver.TestCase('jchzalrnumimnmhp', 0, 0),
+            solver.TestCase('haegwjzuvuyypxyu', 0, 0),
+            solver.TestCase('dvszwmarrgswjxmb', 0, 0),
+            solver.TestCase('xyxy', 0, 1),
+            solver.TestCase('aabcdefgaa', 0, 0),
+            solver.TestCase('qjhvhtzxzqqjkmpb', 0, 1),
+            solver.TestCase('xxyxx', 0, 1),
+            solver.TestCase('uurcxstgmygtbstg', 0, 0),
+            solver.TestCase('ieodomkazucvgmuy', 0, 0),
+            solver.TestCase('aaccacc', 1, 1),
+        )
+        for test_case in test_cases:
+            self._run_test_case(test_case)
