@@ -303,21 +303,21 @@ class Solver(solver.AdventOfCodeSolver):
         Args: None
         Returns: None
         """
-        input1 = '123 -> a'
-        input2 = '\n'.join((input1, '321 -> a'))
-        input3 = '\n'.join(('123 -> b', '456 -> c', 'b AND c -> a'))
-        input4 = '\n'.join(('123 -> b', '456 -> c', 'b OR c -> a'))
-        input5 = '\n'.join(('123 -> b', 'NOT b -> a'))
-        input6 = '\n'.join(('123 -> b', 'b LSHIFT 2 -> a'))
-        input7 = '\n'.join(('123 -> b', 'b RSHIFT 2 -> a'))
+        input1 = ('123 -> a',)
+        input2 = ('123 -> a', '321 -> a')
+        input3 = ('123 -> b', '456 -> c', 'b AND c -> a')
+        input4 = ('123 -> b', '456 -> c', 'b OR c -> a')
+        input5 = ('123 -> b', 'NOT b -> a')
+        input6 = ('123 -> b', 'b LSHIFT 2 -> a')
+        input7 = ('123 -> b', 'b RSHIFT 2 -> a')
         test_cases = (
-            solver.TestCase(input1, 123, 123),
-            solver.TestCase(input2, 321, 321),
-            solver.TestCase(input3, 72, 72),
-            solver.TestCase(input4, 507, 507),
-            solver.TestCase(input5, 65412, 123),
-            solver.TestCase(input6, 492, 1968),
-            solver.TestCase(input7, 30, 7),
+            solver.TestCase('\n'.join(input1), 123, 123),
+            solver.TestCase('\n'.join(input2), 321, 321),
+            solver.TestCase('\n'.join(input3), 72, 72),
+            solver.TestCase('\n'.join(input4), 507, 507),
+            solver.TestCase('\n'.join(input5), 65412, 123),
+            solver.TestCase('\n'.join(input6), 492, 1968),
+            solver.TestCase('\n'.join(input7), 30, 7),
         )
         for test_case in test_cases:
             self._run_test_case(test_case)
