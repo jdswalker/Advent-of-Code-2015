@@ -39,11 +39,11 @@ from advent_of_code.solvers import (
 )
 
 
-def get_solver(puzzle, file_name=None):
+def get_solver(day, file_name=None):
     """Instantiates the solver for the given Advent of Code problem
 
     Args:
-        puzzle (int): Number of the Advent of Code problem to solve
+        day (int): Day of the Advent of Code problem to solve
         file_name (str): Name of a file containing puzzle input
     Returns:
         Solver: Used to solve the given Advent of Code problem
@@ -77,8 +77,8 @@ def get_solver(puzzle, file_name=None):
         day_24,  # Day 24: It Hangs in the Balance
         day_25,  # Day 25: Let It Snow
     )
-    if 0 < puzzle <= len(aoc_solvers):
-        aoc_solver = aoc_solvers[puzzle - 1].Solver
+    if 0 < day <= len(aoc_solvers):
+        aoc_solver = aoc_solvers[day - 1].Solver
     else:
-        raise ValueError('No solver exists for puzzle ' + str(puzzle))
+        raise ValueError('No solver exists for puzzle ' + str(day))
     return aoc_solver(file_name)

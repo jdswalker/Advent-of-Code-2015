@@ -14,8 +14,8 @@ cd Advent-of-Code-2015
 ## Usage  
 
 ```sh
-python -m advent_of_code [-h] [-v] -p DAY [-i FILE_NAME]
-python -m advent_of_code [--help] [--version] --puzzle DAY [--input FILE_NAME]
+python -m advent_of_code [-h] [-v] -p DAY [-f PATH]
+python -m advent_of_code [--help] [--version] --puzzle DAY [--file PATH]
 ```
 
 **Examples:**  

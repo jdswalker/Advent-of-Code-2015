@@ -47,16 +47,16 @@ def get_args():
         required=True,
         help='Day of the Advent of Code 2015 puzzle',
         metavar='DAY',
-        dest='puzzle',
+        dest='day',
     )
     parser.add_argument(
-        '-i',
-        '--input',
+        '-f',
+        '--file',
         default=None,
         type=str,
         help='Input file for the Advent of Code 2015 puzzle',
-        metavar='FILE',
-        dest='input_file',
+        metavar='PATH',
+        dest='file_name',
     )
 
     return parser.parse_args()
@@ -69,14 +69,14 @@ def main():
     Returns: None
     """
     args = get_args()
-    solver = factory.get_solver(args.puzzle, args.input_file)
-    if args.input_file is None:
+    solver = factory.get_solver(args.day, args.file_name)
+    if args.file_name:
+        print(solver.puzzle_title)
+        print(solver.get_puzzle_solution())
+    else:
         print('No puzzle input was provided')
         print('Running test cases for ' + solver.puzzle_title)
         solver.run_test_cases()
-    else:
-        print(solver.puzzle_title)
-        print(solver.get_puzzle_solution())
 
 
 if __name__ == '__main__':
