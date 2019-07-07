@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-Advent of Code 2015 from http://adventofcode.com/2015/day/9
+"""Puzzle Solver for Advent of Code 2015 Day 9
 Author: James Walker
 Copyright: MIT license
 
+Description (https://adventofcode.com/2015/day/9):
 --- Day 9: All in a Single Night ---
 
   Every year, Santa manages to deliver all of his presents in a single night.
@@ -61,7 +61,7 @@ from advent_of_code.solvers import solver
 class Solver(solver.AdventOfCodeSolver):
     """Advent of Code 2015 Day 9: All in a Single Night
 
-    Attributes
+    Attributes:
         puzzle_input (list): A list of instructions for solving the puzzle
         puzzle_title (str): Name of the Advent of Code puzzle
         solved_output (str): A template string for solution output
@@ -78,49 +78,49 @@ class Solver(solver.AdventOfCodeSolver):
 
     @staticmethod
     def _get_route(town1, town2):
-        """
+        """Returns the towns as a sorted tuple to use as a dictionary key
 
         Args:
-            town1
-            town2
+            town1 (str): Name of the first town in the route
+            town2 (str): Name of the second town in the route
         Returns:
-            tuple:
+            tuple: Sorted tuple of the town names
         """
         return (town1, town2) if town1 < town2 else (town2, town1)
 
     def _parse_route(self, line):
-        """
+        """Splits and parses the string from a single line of input
 
         Args:
-            line (str):
+            line (str): Raw route information for the puzzle
         Returns:
-            dict:
+            dict: Sorted pair of towns as the key for the route's distance
         """
-        town1, remainder = line.split(' to ')
-        town2, distance = remainder.split(' = ')
-        self._towns.add(town1)
-        self._towns.add(town2)
+        town1, _, town2, _, distance = line.split()
+        self._towns.update({town1, town2})
         return {self._get_route(town1, town2): int(distance)}
 
     def _parse_input(self):
-        """
+        """Parses lines of input into a dictionary of town routes
 
         Args: None
-        Returns: None
+        Returns:
+            dict: Pairs of towns as keys for a route distance value
         """
-        self._routes = {}
+        routes = {}
         for line in self._puzzle_input.splitlines():
             if line:
-                self._routes.update(self._parse_route(line))
+                routes.update(self._parse_route(line))
+        return routes
 
     def _get_cycle(self, fixed_point, sub_path):
-        """
+        """Generates a directed cyclic path through every town
 
         Args:
-            fixed_point
-            sub_path
+            fixed_point (str): Starting point for the cycle
+            sub_path (tuple): Towns that have not been visited yet
         Returns:
-            tuple:
+            tuple: Stores the path taken through every town
         """
         cycle = set()
         current_town = fixed_point
@@ -137,7 +137,7 @@ class Solver(solver.AdventOfCodeSolver):
         Returns:
             tuple: Pair of solutions for the two parts of the puzzle
         """
-        self._parse_input()
+        self._routes = self._parse_input()
         min_distance, max_distance = sys.maxsize, -1
         cycles = set()
         fixed_point = self._towns.pop()
@@ -145,7 +145,7 @@ class Solver(solver.AdventOfCodeSolver):
             cycle = self._get_cycle(fixed_point, sub_path)
             if cycle not in cycles:
                 cycles.add(cycle)
-                distances = sorted([self._routes[route] for route in cycle])
+                distances = sorted(self._routes[route] for route in cycle)
                 # Part 1 of Day 9
                 min_distance = min(min_distance, sum(distances[:-1]))
                 # Part 2 of Day 9
@@ -163,4 +163,6 @@ class Solver(solver.AdventOfCodeSolver):
             'London to Belfast = 518',
             'Dublin to Belfast = 141',
         ))
-        self._run_test_case(solver.TestCase(input1, 605, 982))
+        test_cases = (solver.TestCase(input1, 605, 982),)
+        for test_case in test_cases:
+            self._run_test_case(test_case)
