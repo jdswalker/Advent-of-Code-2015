@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-Advent of Code 2015 from http://adventofcode.com/2015/day/11
+"""Puzzle Solver for Advent of Code 2015 Day 11
 Author: James Walker
 Copyright: MIT license
 
+Description (https://adventofcode.com/2015/day/11):
 --- Day 11: Corporate Policy ---
 
   Santa's previous password expired, and he needs help choosing a new one.
@@ -44,13 +44,11 @@ Copyright: MIT license
 
   Given Santa's current password (your puzzle input), what should his next
   password be?
-
     Answer: vzbxxyzz
 
 --- Day 10: Part Two ---
 
   Santa's password expired again. What's the next one?
-
     Answer: vzcaabcc
 """
 
@@ -76,12 +74,13 @@ class Solver(solver.AdventOfCodeSolver):
 
     @staticmethod
     def _has_increasing_straight(password):
-        """
+        """Checks password for +3 consecutive ascending alphabetic letters
+        e.g., abc, bcd, cde
 
         Args:
-            password (str):
+            password (str): Password to check for an increasing straight
         Returns:
-            bool:
+            bool: True if password contains increasing straight, else False
         """
         contains_straight = False
         for i in range(6):
@@ -92,12 +91,12 @@ class Solver(solver.AdventOfCodeSolver):
 
     @staticmethod
     def _has_two_char_pairs(password):
-        """
+        """Checks password for +2 non-overlapping letter pairs (e.g., aa, bb)
 
         Args:
-            password (str):
+            password (str): Password to check for letter pairs
         Returns:
-            bool:
+            bool: True if password contains two letter pairs, else False
         """
         char_pairs = {
             password[i] for i in range(7)
@@ -105,29 +104,13 @@ class Solver(solver.AdventOfCodeSolver):
         }
         return len(char_pairs) >= 2
 
-    @staticmethod
-    def _has_ambiguous_char(password):
-        """
-
-        Args:
-            password (str):
-        Returns:
-            bool:
-        """
-        has_bad_char = False
-        for ambiguous_char in (ord('i'), ord('l'), ord('o')):
-            if ambiguous_char in password:
-                has_bad_char = True
-                break
-        return has_bad_char
-
     def _is_valid_new_password(self, password):
-        """
+        """Checks security requirements on the password
 
         Args:
-            password (str):
+            password (str): Password to check against security requirements
         Returns:
-            bool:
+            bool: True if the password is considered secure, else False
         """
         has_straight = self._has_increasing_straight(password)
         has_char_pairs = self._has_two_char_pairs(password)
@@ -135,17 +118,19 @@ class Solver(solver.AdventOfCodeSolver):
 
     @staticmethod
     def _increment_password(password):
-        """
+        """Changes the rightmost character to the next letter in the alphabet
+        or wraps around to 'a' if the rightmost character is 'z'
 
         Args:
-            password (str):
+            password (str): Password that will be incremented until valid
         Returns: None
         """
         force_turn_over = False
+        ambiguous_chars = (ord('i'), ord('l'), ord('o'))
         for char in range(8):
             if force_turn_over:
                 password[char] = ord('z')
-            if password[char] in (ord('i'), ord('l'), ord('o')):
+            if password[char] in ambiguous_chars:
                 force_turn_over = True
         for char in range(-1, -9, -1):
             if password[char] == ord('z'):
@@ -155,18 +140,18 @@ class Solver(solver.AdventOfCodeSolver):
                 break
 
     def _get_next_password(self, old_password):
-        """
+        """Increments the given password until finding a new valid password
 
         Args:
-            old_password (str):
+            old_password (str): Current password that needs to be replaced
         Returns:
-            str:
+            str: Valid new password generated from the previous password
         """
         password = [ord(char) for char in old_password]
         self._increment_password(password)
         while not self._is_valid_new_password(password):
             self._increment_password(password)
-        return ''.join((chr(position) for position in password))
+        return ''.join(chr(position) for position in password)
 
     def _solve_puzzle_parts(self):
         """Solves each part of a Advent of Code 2015 puzzle
@@ -190,8 +175,12 @@ class Solver(solver.AdventOfCodeSolver):
         input3 = 'abbcegjk'
         input4 = 'abcdefgh'
         input5 = 'ghijklmn'
-        self._run_test_case(solver.TestCase(input1, 'hjaaabcc', 'hjaabbcd'))
-        self._run_test_case(solver.TestCase(input2, 'abbcefgg', 'abbcffgh'))
-        self._run_test_case(solver.TestCase(input3, 'abbcffgh', 'abbcfghh'))
-        self._run_test_case(solver.TestCase(input4, 'abcdffaa', 'abcdffbb'))
-        self._run_test_case(solver.TestCase(input5, 'ghjaabcc', 'ghjbbcdd'))
+        test_cases = (
+            solver.TestCase(input1, 'hjaaabcc', 'hjaabbcd'),
+            solver.TestCase(input2, 'abbcefgg', 'abbcffgh'),
+            solver.TestCase(input3, 'abbcffgh', 'abbcfghh'),
+            solver.TestCase(input4, 'abcdffaa', 'abcdffbb'),
+            solver.TestCase(input5, 'ghjaabcc', 'ghjbbcdd'),
+        )
+        for test_case in test_cases:
+            self._run_test_case(test_case)
