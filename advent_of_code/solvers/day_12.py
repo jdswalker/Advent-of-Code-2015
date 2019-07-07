@@ -54,6 +54,10 @@ import json
 from advent_of_code.solvers import solver
 
 
+# Equivalent to <class 'dict_values'>
+DICT_VALUES = type({}.values())
+
+
 class Solver(solver.AdventOfCodeSolver):
     """Advent of Code 2015 Day 12: JSAbacusFramework.io
 
@@ -71,40 +75,21 @@ class Solver(solver.AdventOfCodeSolver):
         ))
 
     @staticmethod
-    def _get_sum(document):
-        """Sums all numeric fields from the JSON input
+    def _get_sum(document, item=None):
+        """Recursively sums all numeric fields from the JSON input
 
         Args:
-            document (mixed): Object parsed from the JSON input
-        Returns:
-            int: Sum of numbers from the JSON input
-        """
-        if isinstance(document, int):
-            total = document
-        elif isinstance(document, list):
-            total = sum(Solver._get_sum(value) for value in document)
-        elif isinstance(document, dict):
-            total = Solver._get_sum([val for val in document.values()])
-        else:
-            total = 0
-        return total
-
-    @staticmethod
-    def _get_correct_sum(document):
-        """Sums all numeric fields from the JSON input ignoring objects that
-        contain the word "red"
-
-        Args:
-            document (mixed): Object parsed from the JSON input
+            document (mixed): JSON parsed into int, list, dict, and/or str
+            item (mixed): Dicts storing this value will be ignored (optional)
         Returns:
             int: Sum of numbers from the JSON input excluding ignored objects
         """
         if isinstance(document, int):
             total = document
-        elif isinstance(document, list):
-            total = sum(Solver._get_correct_sum(val) for val in document)
-        elif isinstance(document, dict) and "red" not in document.values():
-            total = Solver._get_correct_sum([val for val in document.values()])
+        elif isinstance(document, (list, DICT_VALUES)):
+            total = sum(Solver._get_sum(val, item) for val in document)
+        elif isinstance(document, dict) and item not in document.values():
+            total = Solver._get_sum(document.values(), item)
         else:
             total = 0
         return total
@@ -117,7 +102,7 @@ class Solver(solver.AdventOfCodeSolver):
             tuple: Pair of solutions for the two parts of the puzzle
         """
         document = json.loads(self.puzzle_input)
-        return self._get_sum(document), self._get_correct_sum(document)
+        return self._get_sum(document), self._get_sum(document, "red")
 
     def run_test_cases(self):
         """Runs a series of inputs and compares against expected outputs
@@ -125,29 +110,19 @@ class Solver(solver.AdventOfCodeSolver):
         Args: None
         Returns: None
         """
-        input01 = '[1,2,3]'
-        input02 = '{"a":2,"b":4}'
-        input03 = '[[[3]]]'
-        input04 = '{"a":{"b":4},"c":-1}'
-        input05 = '{"a":[-1,1]}'
-        input06 = '[-1,{"a":1}]'
-        input07 = '[]'
-        input08 = '{}'
-        input09 = '[1,{"c":"red","b":2},3]'
-        input10 = '{"d":"red","e":[1,2,3,4],"f":5}'
-        input11 = '[1,"red",5]'
         test_cases = (
-            solver.TestCase(input01, 6, 6),
-            solver.TestCase(input02, 6, 6),
-            solver.TestCase(input03, 3, 3),
-            solver.TestCase(input04, 3, 3),
-            solver.TestCase(input05, 0, 0),
-            solver.TestCase(input06, 0, 0),
-            solver.TestCase(input07, 0, 0),
-            solver.TestCase(input08, 0, 0),
-            solver.TestCase(input09, 6, 4),
-            solver.TestCase(input10, 15, 0),
-            solver.TestCase(input11, 6, 6),
+            solver.TestCase('[1,2,3]', 6, 6),
+            solver.TestCase('{"a":2,"b":4}', 6, 6),
+            solver.TestCase('[[[3]]]', 3, 3),
+            solver.TestCase('{"a":{"b":4},"c":-1}', 3, 3),
+            solver.TestCase('{"a":[-1,1]}', 0, 0),
+            solver.TestCase('[-1,{"a":1}]', 0, 0),
+            solver.TestCase('[]', 0, 0),
+            solver.TestCase('{}', 0, 0),
+            solver.TestCase('[1,{"c":"red","b":2},3]', 6, 4),
+            solver.TestCase('{"d":"red","e":[1,2,3,4],"f":5}', 15, 0),
+            solver.TestCase('[1,"red",5]', 6, 6),
+            solver.TestCase('["a", {"red":1}]', 1, 1), # "red" keys are ok
         )
         for test_case in test_cases:
             self._run_test_case(test_case)
