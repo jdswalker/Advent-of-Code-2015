@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-Advent of Code 2015 from http://adventofcode.com/2015/day/10
+"""Puzzle Solver for Advent of Code 2015 Day 10
 Author: James Walker
 Copyright: MIT license
 
+Description (https://adventofcode.com/2015/day/10):
 --- Day 10: Elves Look, Elves Say ---
 
   Today, the Elves are playing a game called look-and-say. They take turns
@@ -27,14 +27,12 @@ Copyright: MIT license
 
   Starting with the digits in your puzzle input, apply this process 40 times.
   What is the length of the result?
-
     Answer: 360154
 
 --- Day 10: Part Two ---
 
   Now, starting again with the digits in your puzzle input, apply this process
   50 times. What is the length of the new result?
-
     Answer: 5103798
 """
 
@@ -63,13 +61,13 @@ class Solver(solver.AdventOfCodeSolver):
 
     @staticmethod
     def _look_and_say(parser, sequence):
-        """
+        """Creates a sequence from playing "look-and-say" on the given sequence
 
         Args:
-            parser (?):
-            sequence (str):
+            parser (Patter): Compiled regex for grouping repeated digits
+            sequence (str): Number sequence to "look-and-say"
         Returns:
-            str:
+            str: New number sequence generated from playing "look-and-say"
         """
         new_sequence = []
         for match in parser.finditer(sequence):
@@ -79,13 +77,13 @@ class Solver(solver.AdventOfCodeSolver):
         return ''.join(new_sequence)
 
     def _apply_look_and_say(self, sequence, count):
-        """
+        """Iteratively creates "look-and-say" sequences from the given sequence
 
         Args:
-            sequence (str):
-            count (int):
+            sequence (str): Initial sequence for "look-and-say" game
+            count (int): Number of times to play "look-and-say"
         Returns:
-            str:
+            str: Final number sequence after playing "look-and-say" count times
         """
         group_numbers = ('|'.join(str(num) + '+' for num in range(0, 10)))
         parser = re.compile(group_numbers)
@@ -111,5 +109,12 @@ class Solver(solver.AdventOfCodeSolver):
         Args: None
         Returns: None
         """
-        sequence = '1'
-        self._run_test_case(solver.TestCase(sequence, 82350, 1166642))
+        test_cases = (
+            solver.TestCase('1', 82350, 1166642),
+            solver.TestCase('2', 95798, 1355550),
+            solver.TestCase('3', 95798, 1355550),
+            solver.TestCase('11', 107312, 1520986),
+            solver.TestCase('111', 149642, 2121256),
+        )
+        for test_case in test_cases:
+            self._run_test_case(test_case)
