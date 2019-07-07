@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-Advent of Code 2015 from http://adventofcode.com/2015/day/12
+"""Puzzle Solver for Advent of Code 2015 Day 12
 Author: James Walker
 Copyright: MIT license
 
+Description (https://adventofcode.com/2015/day/12):
 --- Day 12: JSAbacusFramework.io ---
 
   Santa's Accounting-Elves need help balancing the books after a recent order.
@@ -26,7 +26,6 @@ Copyright: MIT license
   You will not encounter any strings containing numbers.
 
   What is the sum of all numbers in the document?
-
     Answer: 191164
 
 --- Day 12: Part Two ---
@@ -45,7 +44,6 @@ Copyright: MIT license
     [1,"red",5] has a sum of 6, because "red" in an array has no effect.
 
   What is the sum of all numbers in the document without double-counting?
-
     Answer: 87842
 """
 
@@ -72,44 +70,44 @@ class Solver(solver.AdventOfCodeSolver):
             'The sum using the correct numbers in the document is {1}',
         ))
 
-    def _sum_all_numbers(self, document):
-        """Runs a series of inputs and compares against expected outputs
+    @staticmethod
+    def _get_sum(document):
+        """Sums all numeric fields from the JSON input
 
         Args:
-            document
+            document (mixed): Object parsed from the JSON input
         Returns:
-            int:
+            int: Sum of numbers from the JSON input
         """
         if isinstance(document, int):
-            num_sum = document
+            total = document
         elif isinstance(document, list):
-            num_sum = sum((self._sum_all_numbers(value) for value in document))
+            total = sum(Solver._get_sum(value) for value in document)
         elif isinstance(document, dict):
-            num_sum = self._sum_all_numbers(list(document.values()))
+            total = Solver._get_sum([val for val in document.values()])
         else:
-            num_sum = 0
-        return num_sum
+            total = 0
+        return total
 
-    def _sum_corrected_nums(self, document):
-        """Runs a series of inputs and compares against expected outputs
+    @staticmethod
+    def _get_correct_sum(document):
+        """Sums all numeric fields from the JSON input ignoring objects that
+        contain the word "red"
 
         Args:
-            document
+            document (mixed): Object parsed from the JSON input
         Returns:
-            int:
+            int: Sum of numbers from the JSON input excluding ignored objects
         """
         if isinstance(document, int):
-            num_sum = document
+            total = document
         elif isinstance(document, list):
-            num_sum = sum(self._sum_corrected_nums(val) for val in document)
-        elif isinstance(document, dict):
-            if "red" not in list(document.values()):
-                num_sum = self._sum_corrected_nums(list(document.values()))
-            else:
-                num_sum = 0
+            total = sum(Solver._get_correct_sum(val) for val in document)
+        elif isinstance(document, dict) and "red" not in document.values():
+            total = Solver._get_correct_sum([val for val in document.values()])
         else:
-            num_sum = 0
-        return num_sum
+            total = 0
+        return total
 
     def _solve_puzzle_parts(self):
         """Solves each part of a Advent of Code 2015 puzzle
@@ -119,10 +117,7 @@ class Solver(solver.AdventOfCodeSolver):
             tuple: Pair of solutions for the two parts of the puzzle
         """
         document = json.loads(self.puzzle_input)
-        return (
-            self._sum_all_numbers(document),
-            self._sum_corrected_nums(document),
-        )
+        return self._get_sum(document), self._get_correct_sum(document)
 
     def run_test_cases(self):
         """Runs a series of inputs and compares against expected outputs
@@ -141,14 +136,18 @@ class Solver(solver.AdventOfCodeSolver):
         input09 = '[1,{"c":"red","b":2},3]'
         input10 = '{"d":"red","e":[1,2,3,4],"f":5}'
         input11 = '[1,"red",5]'
-        self._run_test_case(solver.TestCase(input01, 6, 6))
-        self._run_test_case(solver.TestCase(input02, 6, 6))
-        self._run_test_case(solver.TestCase(input03, 3, 3))
-        self._run_test_case(solver.TestCase(input04, 3, 3))
-        self._run_test_case(solver.TestCase(input05, 0, 0))
-        self._run_test_case(solver.TestCase(input06, 0, 0))
-        self._run_test_case(solver.TestCase(input07, 0, 0))
-        self._run_test_case(solver.TestCase(input08, 0, 0))
-        self._run_test_case(solver.TestCase(input09, 6, 4))
-        self._run_test_case(solver.TestCase(input10, 15, 0))
-        self._run_test_case(solver.TestCase(input11, 6, 6))
+        test_cases = (
+            solver.TestCase(input01, 6, 6),
+            solver.TestCase(input02, 6, 6),
+            solver.TestCase(input03, 3, 3),
+            solver.TestCase(input04, 3, 3),
+            solver.TestCase(input05, 0, 0),
+            solver.TestCase(input06, 0, 0),
+            solver.TestCase(input07, 0, 0),
+            solver.TestCase(input08, 0, 0),
+            solver.TestCase(input09, 6, 4),
+            solver.TestCase(input10, 15, 0),
+            solver.TestCase(input11, 6, 6),
+        )
+        for test_case in test_cases:
+            self._run_test_case(test_case)
