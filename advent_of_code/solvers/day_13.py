@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-Advent of Code 2015 from http://adventofcode.com/2015/day/13
+"""Puzzle Solver for Advent of Code 2015 Day 13
 Author: James Walker
 Copyright: MIT license
 
+Description (https://adventofcode.com/2015/day/13):
 --- Day 13: Knights of the Dinner Table ---
 
   In years past, the holiday feast with your family hasn't gone so well. Not
@@ -55,7 +55,6 @@ Copyright: MIT license
 
   What is the total change in happiness for the optimal seating arrangement of
   the actual guest list?
-
     Answer: 618
 
 --- Day 13: Part Two ---
@@ -70,13 +69,11 @@ Copyright: MIT license
 
   What is the total change in happiness for the optimal seating arrangement
   that actually includes yourself?
-
     Answer: 601
 """
 
 # Standard Library Imports
 from itertools import permutations
-import re
 import sys
 
 # Application-specific Imports
@@ -100,91 +97,74 @@ class Solver(solver.AdventOfCodeSolver):
         ))
 
     @staticmethod
-    def _get_seat_pair(seat1, seat2):
-        """
+    def _get_seat_pair(guest1, guest2):
+        """Returns an alphabetically ordered tuple of the guests' names
 
         Args:
-            seat1
-            seat2
+            guest1 (str): Name of first guest in seat pair
+            guest2 (str): Name of second guest in seat pair
         Returns:
-            tuple:
+            tuple: Alphabetically ordered pair of guest names
         """
-        return (seat1, seat2) if seat1 < seat2 else (seat2, seat1)
-
-    @staticmethod
-    def _parse_happiness(pairing):
-        """
-
-        Args:
-            pairing
-        Returns:
-            int:
-        """
-        happiness = int(pairing.group(3))
-        return happiness if pairing.group(2) != 'lose' else -1 * happiness
+        return (guest1, guest2) if guest1 < guest2 else (guest2, guest1)
 
     def _parse_input(self):
-        """
+        """Parses lines of input into seat pair preferences
 
         Args: None
         Returns:
-            tuple:
+            tuple: List of attendees and dict of seat pair preferences
         """
-        attendees = set()
-        seat_pairs = {}
-        seat_pair_pattern = (
-            r'(\w+) would (\w+) (\d+) happiness units by sitting next to (\w+)'
-        )
-        parser = re.compile(seat_pair_pattern)
+        attendees, seat_pairs = set(), {}
         for line in self.puzzle_input.splitlines():
-            pairing = parser.match(line)
-            if pairing:
-                seat1, seat2 = pairing.group(1), pairing.group(4)
-                happiness = self._parse_happiness(pairing)
-                seat_pair = self._get_seat_pair(seat1, seat2)
-                if seat_pair not in seat_pairs:
-                    seat_pairs[seat_pair] = 0
-                    attendees.add(seat_pair[0])
-                    attendees.add(seat_pair[1])
-                seat_pairs[seat_pair] += happiness
-        return (attendees, seat_pairs)
+            if not line:
+                continue
+            tokens = line.split()
+            seat_pair = self._get_seat_pair(tokens[0], tokens[-1][:-1])
+            if seat_pair not in seat_pairs:
+                seat_pairs[seat_pair] = 0
+                attendees.update(seat_pair)
+            if tokens[2] == 'gain':
+                seat_pairs[seat_pair] += int(tokens[3])  # Happiness
+            else:
+                seat_pairs[seat_pair] -= int(tokens[3])
+        return attendees, seat_pairs
 
-    def _get_seating_plan(self, first_seat, other_seats):
-        """
+    def _get_seating_plan(self, first_guest, other_guests):
+        """Creates a tuple of seat pairs as a seating arrangement for the table
 
         Args:
-            first_seat
-            other_seats
+            first_guest (str): First guest assigned a seat around the table
+            other_guests (list): Remaining guests to assign seats
         Returns:
-            tuple:
+            tuple: Seating arrangement for the given permutation of guests
         """
         arrangement = set()
-        current_seat = first_seat
-        for next_seat in other_seats:
-            arrangement.add(self._get_seat_pair(current_seat, next_seat))
-            current_seat = next_seat
-        arrangement.add(self._get_seat_pair(current_seat, first_seat))
+        current_guest = first_guest
+        for next_guest in other_guests:
+            arrangement.add(self._get_seat_pair(current_guest, next_guest))
+            current_guest = next_guest
+        arrangement.add(self._get_seat_pair(current_guest, first_guest))
         return tuple(sorted(arrangement))
 
     def _get_max_happiness(self, attendees, seat_pairs):
-        """
+        """Permutes seating plans to calculate happiness and returns max value
 
         Args:
-            attendees
-            seat_pairs
+            attendees (list): Names of guests attending the party
+            seat_pairs (dict): Seat pair keys mapped to happiness values
         Returns:
-            int:
+            int: Maximum happiness for a seating plan with the given guests
         """
-        max_happiness = -sys.maxsize
+        happiness = -sys.maxsize
         seating_plans = set()
-        first_seat = attendees.pop()
-        for other_seats in permutations(attendees, len(attendees)):
-            arrangement = self._get_seating_plan(first_seat, other_seats)
-            if arrangement not in seating_plans:
-                seating_plans.add(arrangement)
-                happiness_sum = sum(seat_pairs[pair] for pair in arrangement)
-                max_happiness = max(max_happiness, happiness_sum)
-        return max_happiness
+        first_guest = attendees.pop()
+        for other_guests in permutations(attendees, len(attendees)):
+            seating = self._get_seating_plan(first_guest, other_guests)
+            if seating not in seating_plans:
+                seating_plans.add(seating)
+                happiness = max(happiness, sum(seat_pairs[i] for i in seating))
+        return happiness
 
     def _solve_puzzle_parts(self):
         """Solves each part of a Advent of Code 2015 puzzle
@@ -195,10 +175,10 @@ class Solver(solver.AdventOfCodeSolver):
         """
         attendees, seat_pairs = self._parse_input()
         max_happiness1 = self._get_max_happiness(attendees.copy(), seat_pairs)
-        mr_nobody = ''
+        yourself = ''
         for attendee in attendees:
-            seat_pairs[self._get_seat_pair(mr_nobody, attendee)] = 0
-        attendees.add(mr_nobody)
+            seat_pairs[(yourself, attendee)] = 0
+        attendees.add(yourself)
         max_happiness2 = self._get_max_happiness(attendees.copy(), seat_pairs)
         return (max_happiness1, max_happiness2)
 
@@ -208,7 +188,7 @@ class Solver(solver.AdventOfCodeSolver):
         Args: None
         Returns: None
         """
-        preferences = '\n'.join((
+        input1 = (
             'Alice would gain 54 happiness units by sitting next to Bob.',
             'Alice would lose 79 happiness units by sitting next to Carol.',
             'Alice would lose 2 happiness units by sitting next to David.',
@@ -221,5 +201,13 @@ class Solver(solver.AdventOfCodeSolver):
             'David would gain 46 happiness units by sitting next to Alice.',
             'David would lose 7 happiness units by sitting next to Bob.',
             'David would gain 41 happiness units by sitting next to Carol.',
-        ))
-        self._run_test_case(solver.TestCase(preferences, 330, 286))
+        )
+        input2 = input1[0:2] + input1[3:5] + input1[6:8]
+        input3 = (input1[0], input1[1].replace('Carol', 'Bob'))
+        test_cases = (
+            solver.TestCase('\n'.join(input1), 330, 286),
+            solver.TestCase('\n'.join(input2), 49, 190),
+            solver.TestCase('\n'.join(input3), -25, -25),
+        )
+        for test_case in test_cases:
+            self._run_test_case(test_case)
