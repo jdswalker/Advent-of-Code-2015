@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-Advent of Code 2015 from http://adventofcode.com/2015/day/14
+"""Puzzle Solver for Advent of Code 2015 Day 14
 Author: James Walker
 Copyright: MIT license
 
+Description (https://adventofcode.com/2015/day/14):
 --- Day 14: Reindeer Olympics ---
 
   This year is the Reindeer Olympics! Reindeer can fly at high speeds, but must
@@ -34,7 +34,6 @@ Copyright: MIT license
 
   Given the descriptions of each reindeer (in your puzzle input), after exactly
   2503 seconds, what distance has the winning reindeer traveled?
-
     Answer: 2696
 
 --- Day 14: Part Two ---
@@ -59,7 +58,6 @@ Copyright: MIT license
 
   Again given the descriptions of each reindeer (in your puzzle input), after
   exactly 2503 seconds, how many points does the winning reindeer have?
-
     Answer: 1084
 """
 
@@ -71,7 +69,8 @@ import re
 from advent_of_code.solvers import solver
 
 
-FlightStats = namedtuple('FlightStats', 'flight_speed flight_time rest_time')
+# Namedtuple for storing reindeer flight metadata
+Reindeer = namedtuple('Reindeer', 'flight_speed flight_time rest_time')
 
 
 class Solver(solver.AdventOfCodeSolver):
@@ -81,6 +80,7 @@ class Solver(solver.AdventOfCodeSolver):
         puzzle_input (list): A list of instructions for solving the puzzle
         puzzle_title (str): Name of the Advent of Code puzzle
         solved_output (str): A template string for solution output
+        time_limit (int): Maximum number of seconds for the race (i.e., 2503)
     """
 
     def __init__(self, *args):
@@ -90,12 +90,22 @@ class Solver(solver.AdventOfCodeSolver):
             'The winning reindeer had {1} points after 2503 seconds.',
         ))
 
-    def _parse_input(self):
-        """
+    @property
+    def time_limit(self):
+        """Return the time limit for counting race points
 
         Args: None
         Returns:
-            dict:
+            int: Total number of seconds for the reindeer race
+        """
+        return 2503
+
+    def _parse_input(self):
+        """Parses reindeer names and flight metadata from the puzzle input
+
+        Args: None
+        Returns:
+            dict: Maps names to Reindeer namedtuples storing flight stats
         """
         parser = re.compile(r'(\w+)\D+(\d+)\D+(\d+)\D+(\d+)')
         reindeer = {}
@@ -103,49 +113,25 @@ class Solver(solver.AdventOfCodeSolver):
             instruction = parser.match(line)
             if not instruction:
                 continue
-            name = instruction.group(1)
-            flight_speed = int(instruction.group(2))
-            flight_time = int(instruction.group(3))
-            rest_time = int(instruction.group(4))
-            reindeer[name] = FlightStats(flight_speed, flight_time, rest_time)
+            name, speed, flight, rest = instruction.groups()
+            reindeer[name] = Reindeer(int(speed), int(flight), int(rest))
         return reindeer
 
     @staticmethod
-    def _get_fly_distance(reindeer, race_time):
-        """
+    def _get_distance(reindeer, race_time):
+        """Calculates the current distance traveled by the reindeer in the race
 
         Args:
-            reindeer
-            race_time
+            reindeer (Reindeer): Namedtuple storing reindeer flight metadata
+            race_time (int): Number of seconds since the race started
         Returns:
-            int:
+            int: Current distance traveled by the reindeer in the race
         """
-        flight_interval = reindeer.flight_time + reindeer.rest_time
-        num_intervals = int(race_time / flight_interval)
-        time_remaining = race_time - (num_intervals * flight_interval)
-        total_flight_time = reindeer.flight_time * num_intervals
-        if time_remaining < reindeer.flight_time:
-            total_flight_time += time_remaining
-        else:
-            total_flight_time += reindeer.flight_time
-        return total_flight_time * reindeer.flight_speed
-
-    def _get_reindeer_distances(self, reindeer, race_time):
-        """
-
-        Args:
-            reindeer
-            race_time
-        Returns:
-            tuple:
-        """
-        winning_distance = 0
-        distances = {}
-        for name in reindeer:
-            distances[name] = self._get_fly_distance(reindeer[name], race_time)
-            if winning_distance < distances[name]:
-                winning_distance = distances[name]
-        return (distances, winning_distance)
+        interval = reindeer.flight_time + reindeer.rest_time
+        cycles = race_time // interval
+        flight_time = min(reindeer.flight_time, race_time - interval * cycles)
+        total_flying_time = reindeer.flight_time * cycles + flight_time
+        return total_flying_time * reindeer.flight_speed
 
     def _solve_puzzle_parts(self):
         """Solves each part of a Advent of Code 2015 puzzle
@@ -154,20 +140,20 @@ class Solver(solver.AdventOfCodeSolver):
         Returns:
             tuple: Pair of solutions for the two parts of the puzzle
         """
-        race_time = 2503
         reindeer = self._parse_input()
         race_points = {name: 0 for name in reindeer}
-        farthest_distance = 0
-        for partial_time in range(1, race_time + 1):
-            distances, farthest_distance = self._get_reindeer_distances(
-                reindeer,
-                partial_time,
-            )
-            for name in reindeer:
-                if distances[name] == farthest_distance:
-                    race_points[name] += 1
-
-        return (farthest_distance, max(race_points.values()))
+        max_distance = 0
+        for time_elapsed in range(1, self.time_limit + 1):
+            distances = {
+                name: Solver._get_distance(reindeer[name], time_elapsed)
+                for name in reindeer
+            }
+            max_distance = max(distances.values())
+            race_points.update({
+                name: race_points[name] + 1
+                for name in race_points if distances[name] == max_distance
+            })
+        return max_distance, max(race_points.values())
 
     def run_test_cases(self):
         """Runs a series of inputs and compares against expected outputs
@@ -175,11 +161,24 @@ class Solver(solver.AdventOfCodeSolver):
         Args: None
         Returns: None
         """
-        test_input = '\n'.join(((
-            'Comet can fly 14 km/s for 10 seconds'
-            ', but then must rest for 127 seconds.'
-        ), (
-            'Dancer can fly 16 km/s for 11 seconds'
-            ', but then must rest for 162 seconds.'
-        )))
-        self._run_test_case(solver.TestCase(test_input, 2660, 1564))
+        line = (
+            '{reindeer} can fly {speed} km/s for {time} seconds'
+            ', but then must rest for {rest} seconds.'
+        )
+        inputs = (
+            line.format(reindeer='Comet', speed=14, time=10, rest=127),
+            line.format(reindeer='Dancer', speed=16, time=11, rest=162),
+            line.format(reindeer='Vixen', speed=18, time=12, rest=207),
+            line.format(reindeer='Prancer', speed=20, time=13, rest=264),
+        )
+        test_cases = (
+            solver.TestCase('\n'.join(inputs[:1]), 2660, 2503),
+            solver.TestCase('\n'.join(inputs[:2]), 2660, 1564),
+            solver.TestCase('\n'.join(inputs[:3]), 2660, 1101),
+            solver.TestCase('\n'.join(inputs), 2660, 994),
+            solver.TestCase('\n'.join(inputs[1:]), 2640, 1201),
+            solver.TestCase('\n'.join(inputs[2:]), 2592, 1517),
+            solver.TestCase('\n'.join(inputs[3:]), 2540, 2503),
+        )
+        for test_case in test_cases:
+            self._run_test_case(test_case)
